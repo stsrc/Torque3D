@@ -20,51 +20,41 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-// Load up all datablocks.  This function is called when
-// a server is constructed.
+datablock RigidShapeData( Chair )
+{
+   category = "Chair";
 
-// Do the sounds first -- later scripts/datablocks may need them
-exec("./audioProfiles.cs");
+   shapeFile = "art/shapes/chairs/chair.dae";
+   emap = true;
 
-// LightFlareData and LightAnimData(s)
-exec("./lights.cs");
+   // Rigid Body
+   mass = 1;
+   massCenter = "0 0 0";    // Center of mass for rigid body
+   massBox = "0 0 0";         // Size of box used for moment of inertia,
+                              // if zero it defaults to object bounding box
+   drag = 0.2;                // Drag coefficient
+   bodyFriction = 0.2;
+   bodyRestitution = 0.1;
+   minImpactSpeed = 5;        // Impacts over this invoke the script callback
+   softImpactSpeed = 5;       // Play SoftImpact Sound
+   hardImpactSpeed = 15;      // Play HardImpact Sound
+   integration = 4;           // Physics integration: TickSec/Rate
+   collisionTol = 0.1;        // Collision distance tolerance
+   contactTol = 0.1;          // Contact velocity tolerance
 
-// Do the various effects next -- later scripts/datablocks may need them
-exec("./particles.cs");
-exec("./environment.cs");
+   minRollSpeed = 10;
 
-exec("./triggers.cs");
+   maxDrag = 0.5;
+   minDrag = 0.01;
 
-// Add a rigid example
-exec("./rigidShape.cs");
+   triggerDustHeight = 1;
+   dustHeight = 10;
 
-// Add a chair example
-exec("./chair.cs");
+   dragForce = 0.05;
+   vertFactor = 0.05;
 
-exec("./health.cs");
-
-// Load our supporting weapon datablocks, effects and such.  They must be
-// loaded before any weapon that uses them.
-exec("./weapon.cs");
-exec("./weapons/grenadefx.cs");
-exec("./weapons/rocketfx.cs");
-
-// Load the weapon datablocks
-exec("./weapons/Lurker.cs");
-exec("./weapons/Ryder.cs");
-exec("./weapons/ProxMine.cs");
-exec("./weapons/Turret.cs");
-
-exec("./teleporter.cs");
-
-// Load the default player datablocks
-exec("./player.cs");
-
-// Load our other player datablocks
-exec("./aiPlayer.cs");
-
-// Load the vehicle datablocks
-exec("./vehicles/cheetahCar.cs");
-
-// Physics objects
-exec("./physics.cs");
+   normalForce = 0.05;
+   restorativeForce = 0.05;
+   rollForce = 0.05;
+   pitchForce = 0.05;
+};
