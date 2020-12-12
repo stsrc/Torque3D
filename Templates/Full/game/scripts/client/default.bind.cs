@@ -117,6 +117,43 @@ function movedown(%val)
       $mvDownAction = %val * $movementSpeed;
 }
 
+function carry(%val)
+{
+   if (%val) {
+   %player = LocalClientConnection.getControlObject();
+
+   if (%player.getClassName() $= "Player")
+   {
+      %mounted = %player.getMountNodeObject(1);
+      if (%mounted) {
+		%eyeVec = %player.getEyeVector();
+		%startPos = %player.getEyePoint();
+		%endPos = VectorAdd(%startPos, VectorScale(%eyeVec, 1));
+		%mounted.setPosition(%endPos);
+		%player.unmountObject(%mounted);
+      } else {
+	      %eyeVec = %player.getEyeVector();
+
+	      %startPos = %player.getEyePoint();
+	      %endPos = VectorAdd(%startPos, VectorScale(%eyeVec, 3));
+
+	      %target = ContainerRayCast(%startPos, %endPos, $TypeMasks::VehicleObjectType);
+
+	      if (%target) {
+		%id = getWords(%target, 0, 0);
+		%transform = setWord(%transform, 0, 0);
+		%transform = setWord(%transform, 1, 1);
+		%transform = setWord(%transform, 2, 1.5);
+		%player.mountObject(%id, 1, %transform);
+		echo("Player mounted object, id = " @ %id);
+	      } else {
+		echo("no target!");
+	      }
+	}
+   }
+   }
+}
+
 function turnLeft( %val )
 {
    $mvYawRightSpeed = %val ? $Pref::Input::KeyboardTurnSpeed : 0;
@@ -263,7 +300,8 @@ moveMap.bind( keyboard, up, moveforward );
 moveMap.bind( keyboard, down, movebackward );
 
 moveMap.bind( keyboard, e, moveup );
-moveMap.bind( keyboard, c, movedown );
+//moveMap.bind( keyboard, c, movedown );
+moveMap.bind(keyboard, c, carry);
 
 moveMap.bind( keyboard, space, jump );
 moveMap.bind( mouse, xaxis, yaw );
